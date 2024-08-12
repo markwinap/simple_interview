@@ -10,11 +10,95 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
+enum Type {
+    FIELD
+    TEXTAREA
+    NUMBER
+    SLIDER
+    DATE
+    TIME
+    SELECT
+    RADIO
+    CHECKBOX
+    SWITCH
+    RATE
+    SELECT_MULTIPLE
+    FILE
+    IMAGE
+    AUDIO
+    VIDEO
+}
+
+enum Result {
+    PASSED
+    FAILED
+}
+
+model Evaluator {
+    id        String    @id @default(cuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
     name      String
+    email     String
+    Evaluation Evaluation[]
+}
+
+model Evaluation {
+    id        String    @id @default(cuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    evaluator Evaluator @relation(fields: [evaluatorId], references: [id])
+    evaluatorId String
+    interview Interview @relation(fields: [interviewId], references: [id])
+    interviewId String
+    feedbacks Feedback[]
+    result    Result
+}
+
+model Feedback {
+    id        String    @id @default(cuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    interview Interview @relation(fields: [interviewId], references: [id])
+    interviewId String
+    value     Value    @relation(fields: [valueId], references: [id])
+    valueId   String
+    score     Int
+    feedback  String
+    Evaluation Evaluation[]
+}
+
+model Field {
+    id        String  @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    name      String
+    type      Type
+    Value Value[]
+}
 
-    @@index([name])
+model Value {
+    id        String    @id @default(cuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    field     Field     @relation(fields: [fieldId], references: [id])
+    fieldId   String
+    value     String
+    interview Interview @relation(fields: [interviewId], references: [id])
+    interviewId String
+
+    Feedback Feedback[]
+}
+
+model Interview {
+    id        String    @id @default(cuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    name String
+    email String
+    Value Value[]
+
+    Evaluation Evaluation[]
+
+    Feedback Feedback[]
 }

@@ -5,9 +5,6 @@ import { api, HydrateClient } from "~/trpc/server";
 import styles from "./index.module.css";
 
 export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
-
-  void api.post.getLatest.prefetch();
 
   return (
     <HydrateClient>
@@ -42,7 +39,7 @@ export default async function Home() {
           </div>
           <div className={styles.showcaseContainer}>
             <p className={styles.showcaseText}>
-              {hello ? hello.greeting : "Loading tRPC query..."}
+as
             </p>
           </div>
 

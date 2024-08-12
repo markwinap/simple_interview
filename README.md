@@ -27,3 +27,13 @@ You can check out the [create-t3-app GitHub repository](https://github.com/t3-os
 ## How do I deploy this?
 
 Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+
+
+
+## Prisma DB Schema Update
+```sh
+npx prisma migrate dev --name init
+npx prisma db push
+
+npx prisma migrate resolve --applied 0_init
+```
